@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雙事業管理系統 - 馬卡龍風格</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        /* 馬卡龍色系配色 */
+        :root {
+            --macaron-pink: #FFD6E8;
+            --macaron-lavender: #E8D5FF;
+            --macaron-mint: #D5FFE8;
+            --macaron-peach: #FFE5D5;
+            --macaron-sky: #D5E8FF;
+            --macaron-lemon: #FFFAD5;
+            --macaron-coral: #FFB3B3;
+            --macaron-sage: #B3D9B3;
+            --text-primary: #5A5A5A;
+            --text-secondary: #8A8A8A;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--macaron-mint) 0%, var(--macaron-sky) 50%, var(--macaron-lavender) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 卡片樣式 */
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px var(--shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            padding: 32px;
+            background: linear-gradient(135deg, var(--macaron-lavender), var(--macaron-pink));
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* 標題樣式 */
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* 按鈕樣式 */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px var(--shadow);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--macaron-lavender), var(--macaron-pink));
+            color: var(--text-primary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--macaron-mint), var(--macaron-sage));
+            color: var(--text-primary);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--macaron-sky), var(--macaron-mint));
+            color: var(--text-primary);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--macaron-peach), var(--macaron-lemon));
+            color: var(--text-primary);
+        }
+
+        .btn-coral {
+            background: linear-gradient(135deg, var(--macaron-coral), var(--macaron-peach));
+            color: var(--text-primary);
+        }
+
+        /* 導航按鈕 */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .business-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .view-nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* 統計卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 6px 24px var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--macaron-pink), var(--macaron-lavender));
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 8px 0;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 表單樣式 */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            padding: 12px 16px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 14px;
+            background: var(--macaron-lemon);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--macaron-lavender);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(232, 213, 255, 0.3);
+        }
+
+        /* 表格樣式 */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px var(--shadow);
+            margin-top: 20px;
+        }
+
+        .table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+            background: var(--white);
+        }
+
+        .table th {
+            background: linear-gradient(135deg, var(--macaron-lavender), var(--macaron-pink));
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border: none;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--macaron-lemon);
+            vertical-align: middle;
+            font-size: 13px;
+        }
+
+        .table tr:hover {
+            background: var(--macaron-lemon);
+        }
+
+        /* 交易項目樣式 */
+        .transaction-item {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 16px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--macaron-mint);
+        }
+
+        .transaction-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .transaction-item.income {
+            border-left-color: var(--macaron-mint);
+            background: linear-gradient(135deg, var(--white), var(--macaron-mint));
+        }
+
+        .transaction-item.expense {
+            border-left-color: var(--macaron-coral);
+            background: linear-gradient(135deg, var(--white), var(--macaron-peach));
+        }
+
+        .transaction-item.internal {
+            border-left-color: var(--macaron-sky);
+            background: linear-gradient(135deg, var(--white), var(--macaron-sky));
+        }
+
+        .transaction-item.external {
+            border-left-color: var(--macaron-lavender);
+            background: linear-gradient(135deg, var(--white), var(--macaron-lavender));
+        }
+
+        /* 入帳狀態樣式 */
+        .accounting-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-recorded {
+            background: var(--macaron-mint);
+            color: var(--text-primary);
+        }
+
+        .status-pending {
+            background: var(--macaron-peach);
+            color: var(--text-primary);
+        }
+
+        /* 標籤樣式 */
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-income {
+            background: var(--macaron-mint);
+            color: var(--text-primary);
+        }
+
+        .tag-expense {
+            background: var(--macaron-coral);
+            color: var(--text-primary);
+        }
+
+        .tag-internal {
+            background: var(--macaron-sky);
+            color: var(--text-primary);
+        }
+
+        .tag-external {
+            background: var(--macaron-lavender);
+            color: var(--text-primary);
+        }
+
+        /* 台灣青年品牌標籤 */
+        .brand-taiwan-youth {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* 工具列 */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        /* 隱藏/顯示元素 */
+        .hidden {
+            display: none;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                grid-column: span 1;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .business-nav {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* 表單區域樣式 */
+        .form-section {
+            background: linear-gradient(135deg, var(--macaron-lemon), var(--macaron-mint));
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 金額顯示樣式 */
+        .amount-positive {
+            color: #059669;
+            font-weight: 700;
+        }
+
+        .amount-negative {
+            color: #DC2626;
+            font-weight: 700;
+        }
+
+        .amount-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* 年度統計容器 */
+        .yearly-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        /* 發票功能樣式 */
+        .invoice-info {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .invoice-number {
+            background: var(--macaron-sky);
+            color: var(--text-primary);
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            grid-column: span 2;
+        }
+
+        .btn-toggle {
+            background: var(--macaron-mint);
+            border: 2px solid var(--macaron-sage);
+            color: var(--text-primary);
+        }
+
+        .btn-toggle.pending {
+            background: var(--macaron-peach);
+            border-color: var(--macaron-coral);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 主標題卡片 -->
+        <div class="card">
+            <div class="card-header">
+                <h1 class="main-title">🎨 雙事業管理系統</h1>
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="switchBusiness('studio')">
+                        📸 攝影工作室
+                    </button>
+                    <button class="btn btn-success" onclick="switchBusiness('craft')">
+                        🎨 手工藝品事業
+                    </button>
+                    <button class="btn btn-coral" onclick="clearAllData()">
+                        🗑️ 清除資料
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 攝影工作室區域 -->
+        <div id="studio-section" class="hidden">
+            <div class="card">
+                <div class="card-body">
+                    <div class="business-nav">
+                        <h2 class="section-title">📸 攝影工作室管理</h2>
+                        <div class="view-nav">
+                            <button class="btn btn-info" onclick="switchView('studio', 'dashboard')">📊 財務概況</button>
+                            <button class="btn btn-warning" onclick="switchView('studio', 'internal')">🏢 內帳管理</button>
+                            <button class="btn btn-primary" onclick="switchView('studio', 'external')">💼 外帳管理</button>
+                            <button class="btn btn-success" onclick="switchView('studio', 'monthly')">📈 月報表</button>
+                            <button class="btn btn-success" onclick="switchView('studio', 'yearly')">📅 年度總表</button>
+                            <button class="btn btn-coral" onclick="exportToExcel('studio')">📄 匯出Excel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 攝影工作室儀表板 -->
+            <div id="studio-dashboard" class="fade-in">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">本月內帳支出</div>
+                        <div class="stat-value amount-negative" id="studio-monthly-internal">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">本月外帳收入</div>
+                        <div class="stat-value amount-positive" id="studio-monthly-external-income">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">本月外帳支出</div>
+                        <div class="stat-value amount-negative" id="studio-monthly-external-expense">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">本月淨利</div>
+                        <div class="stat-value" id="studio-monthly-profit">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">待入帳金額</div>
+                        <div class="stat-value amount-negative" id="studio-pending-amount">NT$ 0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="section-title">📈 最近交易記錄</h3>
+                        <div id="studio-recent-transactions"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 攝影工作室內帳管理 -->
+            <div id="studio-internal" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <h3 class="section-title">🏢 內帳管理 (工作室支出)</h3>
+                            <button class="btn btn-primary" onclick="toggleForm('studio-internal-form')">
+                                ➕ 新增內帳記錄
+                            </button>
+                        </div>
+
+                        <div id="studio-internal-form" class="form-section hidden">
+    <h4 class="form-title">新增攝影工作室內帳記錄</h4>
+    <div class="form-grid">
+        <select id="studio-internal-type" class="form-control">
+            <option value="expense">內帳支出</option>
+            <option value="income">內帳收入</option>
+        </select>
+        
+        <select id="studio-internal-account" class="form-control">
+            <option value="">選擇會計科目</option>
+        </select>
+        <input type="number" id="studio-internal-amount" class="form-control" placeholder="金額">
+        <input type="text" id="studio-internal-description" class="form-control" placeholder="詳細描述">
+        <input type="date" id="studio-internal-date" class="form-control" title="交易日期">
+        
+        <input type="text" id="studio-internal-invoice" class="form-control" placeholder="發票號碼 (選填)">
+        <input type="date" id="studio-internal-invoice-date" class="form-control" title="發票日期 (選填)">
+        
+        <button type="button" id="studio-internal-status-toggle" class="btn btn-toggle" onclick="toggleAccountingStatus('studio-internal')">
+            <span id="studio-internal-status-text">已入帳</span>
+        </button>
+        
+        <button class="btn btn-success" onclick="addTransaction('studio', 'internal')">新增記錄</button>
+    </div>
+</div>
+
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+        <th>交易日期</th>
+        <th>類型</th>
+        <th>會計科目</th>
+        <th>摘要說明</th>
+        <th>收入</th>
+        <th>支出</th>
+        <th>發票資訊</th>
+        <th>入帳狀態</th>
+        <th>操作</th>
+    </tr>
+</thead>
+                                <tbody id="studio-internal-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 攝影工作室外帳管理 -->
+            <div id="studio-external" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <h3 class="section-title">💼 外帳管理 (營業收支)</h3>
+                            <button class="btn btn-primary" onclick="toggleForm('studio-external-form')">
+                                ➕ 新增外帳記錄
+                            </button>
+                        </div>
+
+                        <div id="studio-external-form" class="form-section hidden">
+                            <h4 class="form-title">新增攝影工作室外帳記錄</h4>
+                            <div class="form-grid">
+                                <select id="studio-external-type" class="form-control">
+                                    <option value="income">營業收入</option>
+                                    <option value="expense">營業支出</option>
+                                </select>
+                                <select id="studio-external-account" class="form-control">
+                                    <option value="">選擇會計科目</option>
+                                </select>
+                                <input type="number" id="studio-external-amount" class="form-control" placeholder="金額">
+                                <input type="text" id="studio-external-description" class="form-control" placeholder="詳細描述">
+                                <input type="date" id="studio-external-date" class="form-control" title="交易日期">
+                                
+                                <!-- 發票相關欄位 -->
+                                <input type="text" id="studio-external-invoice" class="form-control" placeholder="發票號碼 (選填)">
+                                <input type="date" id="studio-external-invoice-date" class="form-control" title="發票日期 (選填)">
+                                
+                                <button type="button" id="studio-external-status-toggle" class="btn btn-toggle" onclick="toggleAccountingStatus('studio-external')">
+                                    <span id="studio-external-status-text">已入帳</span>
+                                </button>
+                                
+                                <button class="btn btn-success" onclick="addTransaction('studio', 'external')">新增記錄</button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>交易日期</th>
+                                        <th>類型</th>
+                                        <th>會計科目</th>
+                                        <th>摘要說明</th>
+                                        <th>收入</th>
+                                        <th>支出</th>
+                                        <th>發票資訊</th>
+                                        <th>入帳狀態</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studio-external-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 攝影工作室月報表 -->
+            <div id="studio-monthly" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <h3 class="section-title">📈 攝影工作室月報表</h3>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <input type="month" id="studio-month-selector" class="form-control" style="width: auto;" onchange="updateMonthlyReport('studio')">
+                                <button class="btn btn-coral" onclick="exportMonthlyToExcel('studio')">📄 匯出月報表</button>
+                            </div>
+                        </div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">月度內帳支出</div>
+        <div class="stat-value amount-negative" id="studio-report-internal-expense">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">月度內帳收入</div>
+        <div class="stat-value amount-positive" id="studio-report-internal-income">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">月度外帳收入</div>
+        <div class="stat-value amount-positive" id="studio-report-external-income">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">月度外帳支出</div>
+        <div class="stat-value amount-negative" id="studio-report-external-expense">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">月度淨利</div>
+        <div class="stat-value" id="studio-report-profit">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">已入帳交易</div>
+        <div class="stat-value" id="studio-report-recorded">0 筆</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">待入帳交易</div>
+        <div class="stat-value amount-negative" id="studio-report-pending">0 筆</div>
+    </div>
+</div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="section-title">📋 月度交易明細</h4>
+                                <div id="studio-monthly-details"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 攝影工作室年度總表 -->
+            <div id="studio-yearly" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="section-title">📅 攝影工作室年度總表</h3>
+                        <div class="yearly-stats">
+    <div class="stat-card">
+        <div class="stat-label">年度營業收入</div>
+        <div class="stat-value amount-positive" id="studio-yearly-external-income">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">年度營業支出</div>
+        <div class="stat-value amount-negative" id="studio-yearly-external-expense">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">年度內帳收入</div>
+        <div class="stat-value amount-positive" id="studio-yearly-internal-income">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">年度內帳支出</div>
+        <div class="stat-value amount-negative" id="studio-yearly-internal-expense">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">年度淨利</div>
+        <div class="stat-value" id="studio-yearly-profit">NT$ 0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">年度待入帳</div>
+        <div class="stat-value amount-negative" id="studio-yearly-pending">NT$ 0</div>
+    </div>
+</div>
+
+        <!-- 手工藝品事業區域 -->
+        <div id="craft-section" class="hidden">
+            <div class="card">
+                <div class="card-body">
+                    <div class="business-nav">
+                        <h2 class="section-title">🎨 手工藝品事業管理</h2>
+                        <div class="view-nav">
+                            <button class="btn btn-info" onclick="switchView('craft', 'dashboard')">📊 營運概況</button>
+                            <button class="btn btn-warning" onclick="switchView('craft', 'internal')">🏢 內帳管理</button>
+                            <button class="btn btn-primary" onclick="switchView('craft', 'external')">💼 外帳管理</button>
+                            <button class="btn btn-success" onclick="switchView('craft', 'inventory')">📦 庫存管理</button>
+                            <button class="btn btn-success" onclick="switchView('craft', 'monthly')">📈 月報表</button>
+                            <button class="btn btn-success" onclick="switchView('craft', 'yearly')">📅 年度總表</button>
+                            <button class="btn btn-coral" onclick="exportToExcel('craft')">📄 匯出Excel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 手工藝品儀表板 -->
+            <div id="craft-dashboard" class="fade-in">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">本月內帳支出</div>
+                        <div class="stat-value amount-negative" id="craft-monthly-internal">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">本月外帳收入</div>
+                        <div class="stat-value amount-positive" id="craft-monthly-external-income">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">本月外帳支出</div>
+                        <div class="stat-value amount-negative" id="craft-monthly-external-expense">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">本月淨利</div>
+                        <div class="stat-value" id="craft-monthly-profit">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">庫存總值</div>
+                        <div class="stat-value" id="craft-inventory-value">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">台灣青年商品總值</div>
+                        <div class="stat-value" id="craft-taiwan-youth-value">NT$ 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">待入帳金額</div>
+                        <div class="stat-value amount-negative" id="craft-pending-amount">NT$ 0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="section-title">🛍️ 最近交易記錄</h3>
+                        <div id="craft-recent-transactions"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 手工藝品內帳管理 -->
+            <div id="craft-internal" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <h3 class="section-title">🏢 內帳管理 (工作室支出)</h3>
+                            <button class="btn btn-primary" onclick="toggleForm('craft-internal-form')">
+                                ➕ 新增內帳記錄
+                            </button>
+                        </div>
+
+                        <div id="craft-internal-form" class="form-section hidden">
+                            <h4 class="form-title">新增手工藝品內帳記錄</h4>
+                            <div class="form-grid">
+                                <select id="craft-internal-account" class="form-control">
+                                    <option value="">選擇會計科目</option>
+                                </select>
+                                <input type="number" id="craft-internal-amount" class="form-control" placeholder="金額">
+                                <input type="text" id="craft-internal-description" class="form-control" placeholder="詳細描述">
+                                <input type="date" id="craft-internal-date" class="form-control" title="交易日期">
+                                
+                                <!-- 發票相關欄位 -->
+                                <input type="text" id="craft-internal-invoice" class="form-control" placeholder="發票號碼 (選填)">
+                                <input type="date" id="craft-internal-invoice-date" class="form-control" title="發票日期 (選填)">
+                                
+                                <button type="button" id="craft-internal-status-toggle" class="btn btn-toggle" onclick="toggleAccountingStatus('craft-internal')">
+                                    <span id="craft-internal-status-text">已入帳</span>
+                                </button>
+                                
+                                <button class="btn btn-success" onclick="addTransaction('craft', 'internal')">新增記錄</button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>交易日期</th>
+                                        <th>會計科目</th>
+                                        <th>摘要說明</th>
+                                        <th>金額</th>
+                                        <th>發票資訊</th>
+                                        <th>入帳狀態</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="craft-internal-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 手工藝品外帳管理 -->
+            <div id="craft-external" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <h3 class="section-title">💼 外帳管理 (營業收支)</h3>
+                            <button class="btn btn-primary" onclick="toggleForm('craft-external-form')">
+                                ➕ 新增外帳記錄
+                            </button>
+                        </div>
+
+                        <div id="craft-external-form" class="form-section hidden">
+                            <h4 class="form-title">新增手工藝品外帳記錄</h4>
+                            <div class="form-grid">
+                                <select id="craft-external-type" class="form-control">
+                                    <option value="income">營業收入</option>
+                                    <option value="expense">營業支出</option>
+                                </select>
+                                <select id="craft-external-account" class="form-control">
+                                    <option value="">選擇會計科目</option>
+                                </select>
+                                <input type="number" id="craft-external-amount" class="form-control" placeholder="金額">
+                                <input type="text" id="craft-external-description" class="form-control" placeholder="詳細描述">
+                                <select id="craft-external-brand" class="form-control">
+                                    <option value="">選擇品牌</option>
+                                    <option value="台灣青年">台灣青年</option>
+                                    <option value="其他">其他品牌</option>
+                                </select>
+                                <input type="date" id="craft-external-date" class="form-control" title="交易日期">
+                                
+                                <!-- 發票相關欄位 -->
+                                <input type="text" id="craft-external-invoice" class="form-control" placeholder="發票號碼 (選填)">
+                                <input type="date" id="craft-external-invoice-date" class="form-control" title="發票日期 (選填)">
+                                
+                                <button type="button" id="craft-external-status-toggle" class="btn btn-toggle" onclick="toggleAccountingStatus('craft-external')">
+                                    <span id="craft-external-status-text">已入帳</span>
+                                </button>
+                                
+                                <button class="btn btn-success" onclick="addTransaction('craft', 'external')">新增記錄</button>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>交易日期</th>
+                                        <th>類型</th>
+                                        <th>會計科目</th>
+                                        <th>摘要說明</th>
+                                        <th>品牌</th>
+                                        <th>收入</th>
+                                        <th>支出</th>
+                                        <th>發票資訊</th>
+                                        <th>入帳狀態</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="craft-external-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div id="craft-inventory" class="hidden">
+    <div class="card">
+        <div class="card-body">
+            <div class="toolbar">
+                <h3 class="section-title">📦 庫存管理</h3>
+                <button class="btn btn-primary" onclick="toggleForm('inventory-form')">
+                    ➕ 新增商品
+                </button>
+            </div>
+
+            <div id="inventory-form" class="form-section hidden">
+                <h4 class="form-title">新增庫存商品</h4>
+                <div class="form-grid">
+                    
+             <select id="inventory-brand" class="form-control">
+                        <option value="">選擇品牌</option>
+                        <option value="台灣青年">台灣青年</option>
+                        <option value="其他">其他品牌</option>
+                    </select>
+                    <select id="inventory-category" class="form-control">
+                        <option value="">選擇商品類別</option>
+                        <option value="衣服">衣服</option>
+                        <option value="吊飾">吊飾</option>
+                        <option value="手工飾品">手工飾品</option>
+                        <option value="生活用品">生活用品</option>
+                        <option value="其他">其他</option>
+                    </select>
+                    <input type="text" id="inventory-name" class="form-control" placeholder="商品名稱">
+                    <input type="number" id="inventory-cost" class="form-control" placeholder="成本">
+                    <input type="number" id="inventory-price" class="form-control" placeholder="售價">
+                    <input type="number" id="inventory-quantity" class="form-control" placeholder="數量">
+                    <input type="text" id="inventory-notes" class="form-control" placeholder="備註">
+                    <button class="btn btn-success" onclick="addInventoryItem()">新增商品</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>品牌</th>
+                            <th>類別</th>
+                            <th>商品名稱</th>
+                            <th>成本</th>
+                            <th>售價</th>
+                            <th>庫存量</th>
+                            <th>庫存價值</th>
+                            <th>備註</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="craft-inventory-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- 手工藝品月報表 -->
+            <div id="craft-monthly" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="toolbar">
+                            <h3 class="section-title">📈 手工藝品事業月報表</h3>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <input type="month" id="craft-month-selector" class="form-control" style="width: auto;" onchange="updateMonthlyReport('craft')">
+                                <button class="btn btn-coral" onclick="exportMonthlyToExcel('craft')">📄 匯出月報表</button>
+                            </div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">月度內帳支出</div>
+                                <div class="stat-value amount-negative" id="craft-report-internal">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">月度外帳收入</div>
+                                <div class="stat-value amount-positive" id="craft-report-income">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">月度外帳支出</div>
+                                <div class="stat-value amount-negative" id="craft-report-expense">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">月度淨利</div>
+                                <div class="stat-value" id="craft-report-profit">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">台灣青年銷售</div>
+                                <div class="stat-value" id="craft-report-taiwan-youth">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">已入帳交易</div>
+                                <div class="stat-value" id="craft-report-recorded">0 筆</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">待入帳交易</div>
+                                <div class="stat-value amount-negative" id="craft-report-pending">0 筆</div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="section-title">📋 月度交易明細</h4>
+                                <div id="craft-monthly-details"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 手工藝品年度總表 -->
+            <div id="craft-yearly" class="hidden">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="section-title">📅 手工藝品事業年度總表</h3>
+                        <div class="yearly-stats">
+                            <div class="stat-card">
+                                <div class="stat-label">年度營業收入</div>
+                                <div class="stat-value amount-positive" id="craft-yearly-income">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度營業支出</div>
+                                <div class="stat-value amount-negative" id="craft-yearly-expense">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度內帳支出</div>
+                                <div class="stat-value amount-negative" id="craft-yearly-internal">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">台灣青年銷售額</div>
+                                <div class="stat-value" id="craft-taiwan-youth-sales">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度待入帳</div>
+                                <div class="stat-value amount-negative" id="craft-yearly-pending">NT$ 0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 資料儲存結構
+        let businessData = {
+            studio: {
+                internal: [],
+                external: []
+            },
+            craft: {
+                internal: [],
+                external: [],
+                inventory: []
+            }
+        };
+
+        // 會計科目設定
+        const accounts = {
+            studio: {
+                internal: [
+                    '租金支出', '水電費用', '網路費用', '清潔費用', '設備維護費', 
+                    '公共設施使用費', '管理費用', '保險費用', '其他共同支出'
+                ],
+                external: {
+                    income: [
+                        '攝影服務收入', '婚禮攝影收入', '商業攝影收入', '人像攝影收入', 
+                        '活動攝影收入', '影片製作收入', '後製服務收入', '器材租借收入', '其他營業收入'
+                    ],
+                    expense: [
+                        '設備費用', '器材折舊', '維修費用', '交通費用', '行銷費用', 
+                        '辦公費用', '軟體授權費', '銀行手續費', '稅務費用', '其他營業費用'
+                    ]
+                }
+            },
+            craft: {
+                internal: [
+                    '租金支出', '水電費用', '網路費用', '工具設備費', '維修保養費',
+                    '保險費用', '其他工作室費用'
+                ],
+                external: {
+                    income: [
+                        '商品銷售收入', '手工飾品收入', '服飾銷售收入', '生活用品收入', 
+                        '客製化收入', '教學收入', '其他營業收入'
+                    ],
+                    expense: [
+                        '原料成本', '包裝材料費', '運費支出', '行銷費用', 
+                        '市場攤位費', '網路平台費用', '銀行手續費', '其他營業費用'
+                    ]
+                }
+            }
+        };
+
+        // 當前狀態
+        let currentBusiness = '';
+        let currentView = '';
+        let currentAccountingStatus = { 'studio-internal': 'recorded', 'studio-external': 'recorded', 'craft-internal': 'recorded', 'craft-external': 'recorded' };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            
+            // 設定今日日期
+            const today = new Date().toISOString().split('T')[0];
+            const dateInputs = [
+                'studio-internal-date', 'studio-external-date',
+                'craft-internal-date', 'craft-external-date'
+            ];
+            
+            dateInputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.value = today;
+            });
+            
+            // 初始化會計科目選項
+            updateAccountOptions();
+            
+            // 初始化入帳狀態按鈕
+            initializeAccountingStatusButtons();
+            
+            // 顯示攝影工作室
+            switchBusiness('studio');
+        });
+
+        // 初始化入帳狀態按鈕
+        function initializeAccountingStatusButtons() {
+            const formTypes = ['studio-internal', 'studio-external', 'craft-internal', 'craft-external'];
+            formTypes.forEach(type => {
+                const toggleBtn = document.getElementById(type + '-status-toggle');
+                const textSpan = document.getElementById(type + '-status-text');
+                if (toggleBtn && textSpan) {
+                    toggleBtn.classList.remove('pending');
+                    textSpan.textContent = '已入帳';
+                }
+            });
+        }
+
+        // 切換入帳狀態
+        function toggleAccountingStatus(formType) {
+            const toggleBtn = document.getElementById(formType + '-status-toggle');
+            const textSpan = document.getElementById(formType + '-status-text');
+            
+            if (!toggleBtn || !textSpan) return;
+            
+            // 切換狀態
+            if (currentAccountingStatus[formType] === 'recorded') {
+                // 改成待入帳
+                currentAccountingStatus[formType] = 'pending';
+                toggleBtn.classList.add('pending');
+                textSpan.textContent = '待入帳';
+            } else {
+                // 改成已入帳
+                currentAccountingStatus[formType] = 'recorded';
+                toggleBtn.classList.remove('pending');
+                textSpan.textContent = '已入帳';
+            }
+        }
+
+        // 載入資料
+        function loadData() {
+            const savedData = localStorage.getItem('businessData');
+            if (savedData) {
+                businessData = JSON.parse(savedData);
+                
+                // 確保舊資料有新欄位
+                ['studio', 'craft'].forEach(business => {
+                    ['internal', 'external'].forEach(category => {
+                        businessData[business][category].forEach(item => {
+                            if (!item.hasOwnProperty('invoiceNumber')) item.invoiceNumber = '';
+                            if (!item.hasOwnProperty('invoiceDate')) item.invoiceDate = '';
+                            if (!item.hasOwnProperty('accountingStatus')) item.accountingStatus = 'recorded';
+                        });
+                    });
+                });
+            } else {
+                // 預設範例資料
+                businessData = {
+                    studio: {
+                        internal: [
+                            { 
+                                id: 1, 
+                                account: '租金支出', 
+                                amount: 15000, 
+                                description: '9月份工作室租金', 
+                                date: '2025-09-01',
+                                invoiceNumber: 'AB12345678',
+                                invoiceDate: '2025-09-01',
+                                accountingStatus: 'recorded'
+                            }
+                        ],
+                        external: [
+                            { 
+                                id: 1, 
+                                type: 'income', 
+                                account: '攝影服務收入', 
+                                amount: 35000, 
+                                description: '張先生婚禮攝影服務', 
+                                date: '2025-09-15',
+                                invoiceNumber: 'CD87654321',
+                                invoiceDate: '2025-09-15',
+                                accountingStatus: 'pending'
+                            }
+                        ]
+                    },
+                    craft: {
+                        internal: [
+                            { 
+                                id: 1, 
+                                account: '租金支出', 
+                                amount: 8000, 
+                                description: '工作室租金分攤', 
+                                date: '2025-09-01',
+                                invoiceNumber: '',
+                                invoiceDate: '',
+                                accountingStatus: 'recorded'
+                            }
+                        ],
+                        external: [
+                            { 
+                                id: 1, 
+                                type: 'income', 
+                                account: '商品銷售收入', 
+                                amount: 1200, 
+                                description: '手工髮圈銷售', 
+                                date: '2025-09-16',
+                                brand: '台灣青年',
+                                invoiceNumber: 'EF11223344',
+                                invoiceDate: '2025-09-16',
+                                accountingStatus: 'recorded'
+                            }
+                        ],
+                        inventory: [
+                            { 
+                                id: 1, 
+                                brand: '台灣青年',  
+                                category: '吊飾',
+                                name: '復古風髮圈',
+                                quantity: 15, 
+                                cost: 80, 
+                                price: 180,  
+                                notes: '手工製作' 
+                            }
+                        ]
+                    }
+                };
+                saveData();
+            }
+        }
+
+        // 儲存資料
+        function saveData() {
+            localStorage.setItem('businessData', JSON.stringify(businessData));
+        }
+
+        // 更新會計科目選項
+        function updateAccountOptions() {
+            // 攝影工作室內帳
+            updateSelectOptions('studio-internal-account', accounts.studio.internal);
+            
+            // 攝影工作室外帳
+            const studioExternalType = document.getElementById('studio-external-type');
+            if (studioExternalType) {
+                studioExternalType.addEventListener('change', function() {
+                    updateSelectOptions('studio-external-account', accounts.studio.external[this.value]);
+                });
+            }
+            updateSelectOptions('studio-external-account', accounts.studio.external.income);
+
+            // 手工藝品內帳
+            updateSelectOptions('craft-internal-account', accounts.craft.internal);
+            
+            // 手工藝品外帳
+            const craftExternalType = document.getElementById('craft-external-type');
+            if (craftExternalType) {
+                craftExternalType.addEventListener('change', function() {
+                    updateSelectOptions('craft-external-account', accounts.craft.external[this.value]);
+                });
+            }
+            updateSelectOptions('craft-external-account', accounts.craft.external.income);
+        }
+
+        function updateSelectOptions(selectId, options) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">選擇會計科目</option>';
+            options.forEach(option => {
+                select.innerHTML += `<option value="${option}">${option}</option>`;
+            });
+        }
+
+        // 切換事業
+        function switchBusiness(business) {
+            currentBusiness = business;
+            
+            // 隱藏所有區域
+            document.getElementById('studio-section').classList.add('hidden');
+            document.getElementById('craft-section').classList.add('hidden');
+            
+            // 顯示選擇的區域
+            document.getElementById(business + '-section').classList.remove('hidden');
+            
+            // 顯示儀表板
+            switchView(business, 'dashboard');
+        }
+
+        // 切換視圖
+        function switchView(business, view) {
+            currentView = view;
+            
+            // 隱藏所有視圖
+            const viewIds = {
+                studio: ['dashboard', 'internal', 'external', 'monthly', 'yearly'],
+                craft: ['dashboard', 'internal', 'external', 'inventory', 'monthly', 'yearly']
+            };
+            
+            viewIds[business].forEach(viewId => {
+                const element = document.getElementById(business + '-' + viewId);
+                if (element) element.classList.add('hidden');
+            });
+            
+            // 顯示選擇的視圖
+            const targetView = document.getElementById(business + '-' + view);
+            if (targetView) targetView.classList.remove('hidden');
+            
+            // 更新資料
+            updateView(business, view);
+        }
+
+        // 更新視圖資料
+        function updateView(business, view) {
+            switch (view) {
+                case 'dashboard':
+                    updateDashboard(business);
+                    break;
+                case 'internal':
+                    updateInternalTable(business);
+                    break;
+                case 'external':
+                    updateExternalTable(business);
+                    break;
+                case 'inventory':
+                    updateInventoryTable();
+                    break;
+                case 'monthly':
+                    initializeMonthSelector(business);
+                    updateMonthlyReport(business);
+                    break;
+                case 'yearly':
+                    updateYearlyStats(business);
+                    break;
+            }
+        }
+
+        // 切換表單顯示
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            if (form) form.classList.toggle('hidden');
+        }
+
+        // 初始化月份選擇器
+        function initializeMonthSelector(business) {
+            const selector = document.getElementById(business + '-month-selector');
+            if (!selector) return;
+            
+            const today = new Date();
+            const currentMonth = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
+            selector.value = currentMonth;
+        }
+
+        // 更新月報表
+function updateMonthlyReport(business) {
+    const selector = document.getElementById(business + '-month-selector');
+    if (!selector || !selector.value) return;
+    
+    const [year, month] = selector.value.split('-').map(Number);
+    
+    // 篩選該月份的交易資料
+    const allInternalTransactions = businessData[business].internal.filter(t => {
+        const date = new Date(t.date);
+        return date.getFullYear() === year && date.getMonth() === month - 1;
+    });
+    
+    const allExternalTransactions = businessData[business].external.filter(t => {
+        const date = new Date(t.date);
+        return date.getFullYear() === year && date.getMonth() === month - 1;
+    });
+    
+    // 計算統計數據
+    const internalIncome = allInternalTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+    const internalExpense = allInternalTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    
+    const externalIncome = allExternalTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+    const externalExpense = allExternalTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+    
+    // 重新計算淨利： (所有收入) - (所有支出)
+    const profit = internalIncome + externalIncome - internalExpense - externalExpense;
+    
+    // 計算入帳狀態統計
+    const allTransactions = [...allInternalTransactions, ...allExternalTransactions];
+    const recordedCount = allTransactions.filter(t => t.accountingStatus === 'recorded').length;
+    const pendingCount = allTransactions.filter(t => t.accountingStatus === 'pending').length;
+    
+    // 更新顯示
+    document.getElementById(`${business}-report-internal-income`).textContent = `NT$ ${internalIncome.toLocaleString()}`;
+    document.getElementById(`${business}-report-internal-expense`).textContent = `NT$ ${internalExpense.toLocaleString()}`;
+    document.getElementById(`${business}-report-income`).textContent = `NT$ ${externalIncome.toLocaleString()}`;
+    document.getElementById(`${business}-report-expense`).textContent = `NT$ ${externalExpense.toLocaleString()}`;
+    document.getElementById(`${business}-report-profit`).textContent = `NT$ ${profit.toLocaleString()}`;
+    document.getElementById(`${business}-report-recorded`).textContent = `${recordedCount} 筆`;
+    document.getElementById(`${business}-report-pending`).textContent = `${pendingCount} 筆`;
+}
+            // 手工藝品特有統計
+            if (business === 'craft') {
+                const taiwanYouthSales = monthlyExternal
+                    .filter(t => t.type === 'income' && t.brand === '台灣青年')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                elements[`${business}-report-taiwan-youth`] = `NT$ ${taiwanYouthSales.toLocaleString()}`;
+            }
+            
+            Object.entries(elements).forEach(([id, text]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                    if (id.includes('profit')) {
+                        element.className = `stat-value ${profit >= 0 ? 'amount-positive' : 'amount-negative'}`;
+                    }
+                }
+            });
+            
+            // 更新交易明細
+            updateMonthlyDetails(business, monthlyInternal, monthlyExternal);
+        }
+
+        // 更新月度交易明細
+        function updateMonthlyDetails(business, monthlyInternal, monthlyExternal) {
+            const container = document.getElementById(business + '-monthly-details');
+            if (!container) return;
+            
+            // 合併並排序所有交易
+            const allTransactions = [
+                ...monthlyInternal.map(t => ({...t, category: 'internal'})),
+                ...monthlyExternal.map(t => ({...t, category: 'external'}))
+            ].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (allTransactions.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">本月暫無交易記錄</p>';
+                return;
+            }
+            
+            container.innerHTML = allTransactions.map(t => {
+                let typeClass = '';
+                let typeLabel = '';
+                let amountPrefix = '';
+                
+                if (t.category === 'internal') {
+                    typeClass = 'internal';
+                    typeLabel = '內帳';
+                    amountPrefix = '-';
+                } else if (t.type === 'income') {
+                    typeClass = 'income';
+                    typeLabel = '外帳收入';
+                    amountPrefix = '+';
+                } else {
+                    typeClass = 'expense';
+                    typeLabel = '外帳支出';
+                    amountPrefix = '-';
+                }
+                
+                const brandTag = t.brand === '台灣青年' ? '<span class="brand-taiwan-youth">台灣青年</span>' : '';
+                const invoiceInfo = t.invoiceNumber ? `<span class="invoice-number">${t.invoiceNumber}</span>` : '';
+                const statusButton = `<button class="btn btn-toggle ${t.accountingStatus === 'pending' ? 'pending' : ''}" onclick="toggleTransactionStatus('${business}', '${t.category}', ${t.id})" style="padding: 2px 6px; font-size: 10px; margin-left: 4px;">
+                    ${t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'}
+                </button>`;
+                
+                return `
+                    <div class="transaction-item ${typeClass}">
+                        <div>
+                            <div class="amount-display">${t.description}</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">
+                                <span class="tag tag-${typeClass}">${typeLabel}</span>
+                                ${t.account} • ${t.date}
+                                ${brandTag}
+                                ${invoiceInfo}
+                                ${statusButton}
+                            </div>
+                        </div>
+                        <div class="amount-display ${t.type === 'income' ? 'amount-positive' : 'amount-negative'}">
+                            ${amountPrefix}NT$ ${t.amount.toLocaleString()}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 匯出月報表Excel
+        function exportMonthlyToExcel(business) {
+            if (typeof XLSX === 'undefined') {
+                alert('Excel功能載入中，請稍後再試...');
+                return;
+            }
+            
+            const selector = document.getElementById(business + '-month-selector');
+            if (!selector || !selector.value) return;
+            
+            const [year, month] = selector.value.split('-').map(Number);
+            const monthName = `${year}年${month}月`;
+            
+            // 篩選該月份的資料
+            const monthlyInternal = businessData[business].internal.filter(t => {
+                const date = new Date(t.date);
+                return date.getFullYear() === year && date.getMonth() === month - 1;
+            });
+            
+            const monthlyExternal = businessData[business].external.filter(t => {
+                const date = new Date(t.date);
+                return date.getFullYear() === year && date.getMonth() === month - 1;
+            });
+            
+            const wb = XLSX.utils.book_new();
+            
+            // 月度內帳報表
+            if (monthlyInternal.length > 0) {
+                const internalData = monthlyInternal.map(t => ({
+                    '交易日期': t.date,
+                    '會計科目': t.account,
+                    '摘要說明': t.description,
+                    '金額': t.amount,
+                    '發票號碼': t.invoiceNumber || '',
+                    '發票日期': t.invoiceDate || '',
+                    '入帳狀態': t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'
+                }));
+                
+                const ws1 = XLSX.utils.json_to_sheet(internalData);
+                XLSX.utils.book_append_sheet(wb, ws1, `${monthName}內帳`);
+            }
+            
+            // 月度外帳報表
+            if (monthlyExternal.length > 0) {
+                const externalData = monthlyExternal.map(t => {
+                    const data = {
+                        '交易日期': t.date,
+                        '會計科目': t.account,
+                        '摘要說明': t.description,
+                        '收入': t.type === 'income' ? t.amount : '',
+                        '支出': t.type === 'expense' ? t.amount : '',
+                        '類型': t.type === 'income' ? '營業收入' : '營業支出',
+                        '發票號碼': t.invoiceNumber || '',
+                        '發票日期': t.invoiceDate || '',
+                        '入帳狀態': t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'
+                    };
+                    
+                    if (business === 'craft') {
+                        data['品牌'] = t.brand || '';
+                    }
+                    
+                    return data;
+                });
+                
+                const ws2 = XLSX.utils.json_to_sheet(externalData);
+                XLSX.utils.book_append_sheet(wb, ws2, `${monthName}外帳`);
+            }
+            
+            const businessName = business === 'studio' ? '攝影工作室' : '手工藝品事業';
+            XLSX.writeFile(wb, `${businessName}${monthName}報表_${new Date().toISOString().split('T')[0]}.xlsx`);
+            
+            alert('月報表Excel檔案已成功匯出！');
+        }
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            if (form) form.classList.toggle('hidden');
+        }
+
+        // 切換交易記錄的入帳狀態
+        function toggleTransactionStatus(business, category, id) {
+            const transaction = businessData[business][category].find(t => t.id === id);
+            if (!transaction) return;
+            
+            // 切換狀態
+            transaction.accountingStatus = transaction.accountingStatus === 'recorded' ? 'pending' : 'recorded';
+            
+            // 儲存資料
+            saveData();
+            
+            // 更新顯示
+            updateView(business, category);
+            if (currentView === 'dashboard') {
+                updateDashboard(business);
+            }
+        }
+
+        // 更新儀表板
+function updateDashboard(business) {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    
+    // 篩選本月內帳資料
+    const monthlyInternal = businessData[business].internal
+        .filter(t => {
+            const date = new Date(t.date);
+            return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+        });
+
+    const monthlyInternalIncome = monthlyInternal
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const monthlyInternalExpense = monthlyInternal
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    // 篩選本月外帳資料
+    const monthlyExternal = businessData[business].external
+        .filter(t => {
+            const date = new Date(t.date);
+            return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+        });
+    
+    const monthlyExternalIncome = monthlyExternal
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const monthlyExternalExpense = monthlyExternal
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const monthlyProfit = (monthlyInternalIncome + monthlyExternalIncome) - (monthlyInternalExpense + monthlyExternalExpense);
+
+    // 計算本月待入帳金額
+    const pendingAmount = [...monthlyInternal, ...monthlyExternal]
+        .filter(t => t.accountingStatus === 'pending')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    // 更新顯示
+    document.getElementById(`${business}-monthly-internal`).textContent = `NT$ ${monthlyInternalExpense.toLocaleString()}`;
+    document.getElementById(`${business}-monthly-external-income`).textContent = `NT$ ${monthlyExternalIncome.toLocaleString()}`;
+    document.getElementById(`${business}-monthly-external-expense`).textContent = `NT$ ${monthlyExternalExpense.toLocaleString()}`;
+    document.getElementById(`${business}-monthly-profit`).textContent = `NT$ ${monthlyProfit.toLocaleString()}`;
+    document.getElementById(`${business}-monthly-pending-amount`).textContent = `NT$ ${pendingAmount.toLocaleString()}`;
+    document.getElementById(`${business}-monthly-profit`).className = `stat-value ${monthlyProfit >= 0 ? 'amount-positive' : 'amount-negative'}`;
+
+    // 更新最近交易記錄
+    updateRecentTransactions(business);
+}
+            // 手工藝品特有統計
+            if (business === 'craft') {
+                const inventoryValue = businessData.craft.inventory.reduce((sum, item) => 
+                    sum + (item.quantity * item.price), 0);
+                
+                const taiwanYouthValue = businessData.craft.inventory
+                    .filter(item => item.brand === '台灣青年')
+                    .reduce((sum, item) => sum + (item.quantity * item.price), 0);
+                
+                const inventoryElement = document.getElementById('craft-inventory-value');
+                const taiwanYouthElement = document.getElementById('craft-taiwan-youth-value');
+                
+                if (inventoryElement) inventoryElement.textContent = `NT$ ${inventoryValue.toLocaleString()}`;
+                if (taiwanYouthElement) taiwanYouthElement.textContent = `NT$ ${taiwanYouthValue.toLocaleString()}`;
+            }
+            
+            // 更新最近交易
+            updateRecentTransactions(business);
+        }
+
+        // 更新最近交易記錄
+        function updateRecentTransactions(business) {
+            const container = document.getElementById(business + '-recent-transactions');
+            if (!container) return;
+            
+            // 合併所有交易記錄
+            const allTransactions = [
+                ...businessData[business].internal.map(t => ({...t, category: 'internal'})),
+                ...businessData[business].external.map(t => ({...t, category: 'external'}))
+            ];
+            
+            const recentTransactions = allTransactions
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+            
+            container.innerHTML = recentTransactions.map(t => {
+                let typeClass = '';
+                let typeLabel = '';
+                let amountPrefix = '';
+                
+                if (t.category === 'internal') {
+                    typeClass = 'internal';
+                    typeLabel = '內帳';
+                    amountPrefix = '-';
+                } else if (t.type === 'income') {
+                    typeClass = 'income';
+                    typeLabel = '外帳收入';
+                    amountPrefix = '+';
+                } else {
+                    typeClass = 'expense';
+                    typeLabel = '外帳支出';
+                    amountPrefix = '-';
+                }
+                
+                const brandTag = t.brand === '台灣青年' ? '<span class="brand-taiwan-youth">台灣青年</span>' : '';
+                const invoiceInfo = t.invoiceNumber ? `<span class="invoice-number">${t.invoiceNumber}</span>` : '';
+                const statusTag = `<button class="btn btn-toggle ${t.accountingStatus === 'pending' ? 'pending' : ''}" onclick="toggleTransactionStatus('${business}', '${t.category}', ${t.id})" style="padding: 2px 6px; font-size: 10px; margin-left: 4px;">
+                    ${t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'}
+                </button>`;
+                
+                return `
+                    <div class="transaction-item ${typeClass}">
+                        <div>
+                            <div class="amount-display">${t.description}</div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">
+                                <span class="tag tag-${typeClass}">${typeLabel}</span>
+                                ${t.account} • ${t.date}
+                                ${brandTag}
+                                ${invoiceInfo}
+                                ${statusTag}
+                            </div>
+                        </div>
+                        <div class="amount-display ${t.type === 'income' ? 'amount-positive' : 'amount-negative'}">
+                            ${amountPrefix}NT$ ${t.amount.toLocaleString()}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 更新內帳表格
+        function updateInternalTable(business) {
+            const tbody = document.getElementById(business + '-internal-table');
+            if (!tbody) return;
+            
+            tbody.innerHTML = businessData[business].internal
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map(t => {
+                    const invoiceInfo = t.invoiceNumber ? 
+                        `<div class="invoice-info">
+                            <span class="invoice-number">${t.invoiceNumber}</span>
+                            ${t.invoiceDate ? `<br><small>${t.invoiceDate}</small>` : ''}
+                        </div>` : '-';
+                    
+                    const statusTag = `<button class="btn btn-toggle ${t.accountingStatus === 'pending' ? 'pending' : ''}" onclick="toggleTransactionStatus('${business}', 'internal', ${t.id})" style="padding: 4px 8px; font-size: 11px;">
+                        ${t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'}
+                    </button>`;
+                    
+                    return `
+                        <tr>
+                            <td>${t.date}</td>
+                            <td><span class="tag tag-internal">${t.account}</span></td>
+                            <td>${t.description}</td>
+                            <td class="amount-display amount-negative">NT$ ${t.amount.toLocaleString()}</td>
+                            <td>${invoiceInfo}</td>
+                            <td>${statusTag}</td>
+                            <td>
+                                <button class="btn btn-coral" onclick="deleteTransaction('${business}', 'internal', ${t.id})" style="padding: 6px 12px; font-size: 12px;">
+                                    🗑️ 刪除
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+
+        // 更新外帳表格
+        function updateExternalTable(business) {
+            const tbody = document.getElementById(business + '-external-table');
+            if (!tbody) return;
+            
+            tbody.innerHTML = businessData[business].external
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map(t => {
+                    const brandTag = t.brand === '台灣青年' ? '<span class="brand-taiwan-youth">台灣青年</span>' : (t.brand || '-');
+                    const brandColumn = business === 'craft' ? `<td>${brandTag}</td>` : '';
+                    
+                    const invoiceInfo = t.invoiceNumber ? 
+                        `<div class="invoice-info">
+                            <span class="invoice-number">${t.invoiceNumber}</span>
+                            ${t.invoiceDate ? `<br><small>${t.invoiceDate}</small>` : ''}
+                        </div>` : '-';
+                    
+                    const statusTag = `<button class="btn btn-toggle ${t.accountingStatus === 'pending' ? 'pending' : ''}" onclick="toggleTransactionStatus('${business}', 'external', ${t.id})" style="padding: 4px 8px; font-size: 11px;">
+                        ${t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'}
+                    </button>`;
+                    
+                    return `
+                        <tr>
+                            <td>${t.date}</td>
+                            <td><span class="tag tag-${t.type}">${t.type === 'income' ? '收入' : '支出'}</span></td>
+                            <td><span class="tag tag-${t.type}">${t.account}</span></td>
+                            <td>${t.description}</td>
+                            ${brandColumn}
+                            <td class="amount-display ${t.type === 'income' ? 'amount-positive' : ''}">
+                                ${t.type === 'income' ? `NT$ ${t.amount.toLocaleString()}` : '-'}
+                            </td>
+                            <td class="amount-display ${t.type === 'expense' ? 'amount-negative' : ''}">
+                                ${t.type === 'expense' ? `NT$ ${t.amount.toLocaleString()}` : '-'}
+                            </td>
+                            <td>${invoiceInfo}</td>
+                            <td>${statusTag}</td>
+                            <td>
+                                <button class="btn btn-coral" onclick="deleteTransaction('${business}', 'external', ${t.id})" style="padding: 6px 12px; font-size: 12px;">
+                                    🗑️ 刪除
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+
+        // 更新庫存表格
+        function updateInventoryTable() {
+            const tbody = document.getElementById('craft-inventory-table');
+            if (!tbody) return;
+            
+            tbody.innerHTML = businessData.craft.inventory.map(item => {
+                const inventoryValue = item.cost * item.quantity;
+                const brandTag = item.brand === '台灣青年' ? '<span class="brand-taiwan-youth">台灣青年</span>' : (item.brand || '-');
+                
+                return `
+                    <tr>
+                        <td>${brandTag}</td>
+                        <td>${item.category}</td>
+                        <td>${item.name}</td>
+                        <td>NT$ ${item.cost.toLocaleString()}</td>
+                        <td>NT$ ${item.price.toLocaleString()}</td>
+                        <td>${item.quantity}</td>
+                        <td>NT$ ${inventoryValue.toLocaleString()}</td>
+                        <td>${item.notes || '-'}</td>
+                        <td>
+                            <button class="btn btn-coral" onclick="deleteInventory(${item.id})" style="padding: 6px 12px; font-size: 12px;">
+                                🗑️ 刪除
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 更新年度統計
+function updateYearlyStats(business) {
+    const currentYear = new Date().getFullYear();
+    
+    // 篩選本年度所有內帳資料
+    const yearlyInternal = businessData[business].internal
+        .filter(t => new Date(t.date).getFullYear() === currentYear);
+
+    const yearlyInternalIncome = yearlyInternal
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const yearlyInternalExpense = yearlyInternal
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    // 篩選本年度所有外帳資料
+    const yearlyExternal = businessData[business].external
+        .filter(t => new Date(t.date).getFullYear() === currentYear);
+    
+    const yearlyExternalIncome = yearlyExternal
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const yearlyExternalExpense = yearlyExternal
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    // 計算年度淨利
+    const yearlyProfit = (yearlyInternalIncome + yearlyExternalIncome) - (yearlyInternalExpense + yearlyExternalExpense);
+    
+    // 計算年度待入帳金額
+    const yearlyPending = [
+        ...yearlyInternal.filter(t => t.accountingStatus === 'pending'),
+        ...yearlyExternal.filter(t => t.accountingStatus === 'pending')
+    ].reduce((sum, t) => sum + t.amount, 0);
+    
+    // 更新統計顯示
+    const elements = {
+        [`${business}-yearly-external-income`]: `NT$ ${yearlyExternalIncome.toLocaleString()}`,
+        [`${business}-yearly-external-expense`]: `NT$ ${yearlyExternalExpense.toLocaleString()}`,
+        [`${business}-yearly-internal-income`]: `NT$ ${yearlyInternalIncome.toLocaleString()}`,
+        [`${business}-yearly-internal-expense`]: `NT$ ${yearlyInternalExpense.toLocaleString()}`,
+        [`${business}-yearly-profit`]: `NT$ ${yearlyProfit.toLocaleString()}`,
+        [`${business}-yearly-pending`]: `NT$ ${yearlyPending.toLocaleString()}`
+    };
+    
+    Object.entries(elements).forEach(([id, text]) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = text;
+            if (id.includes('profit')) {
+                element.className = `stat-value ${yearlyProfit >= 0 ? 'amount-positive' : 'amount-negative'}`;
+            }
+        }
+    });
+}
+            
+            // 手工藝品特有統計
+            if (business === 'craft') {
+                const taiwanYouthSales = yearlyExternal
+                    .filter(t => t.type === 'income' && t.brand === '台灣青年')
+                    .reduce((sum, t) => sum + t.amount, 0);
+                
+                const salesElement = document.getElementById('craft-taiwan-youth-sales');
+                if (salesElement) salesElement.textContent = `NT$ ${taiwanYouthSales.toLocaleString()}`;
+            }
+        }
+
+        // 新增交易記錄
+function addTransaction(business, category) {
+    const prefix = business + '-' + category;
+    const type = document.getElementById(prefix + '-type').value; // 將類型讀取移到這裡
+    const account = document.getElementById(prefix + '-account').value;
+    const amount = parseFloat(document.getElementById(prefix + '-amount').value);
+    const description = document.getElementById(prefix + '-description').value;
+    const date = document.getElementById(prefix + '-date').value;
+    const invoiceNumber = document.getElementById(prefix + '-invoice').value;
+    const invoiceDate = document.getElementById(prefix + '-invoice-date').value;
+
+    let brand = '';
+
+    // 這段處理只針對手工藝品外帳的品牌欄位
+    if (business === 'craft' && category === 'external') {
+        const brandElement = document.getElementById(prefix + '-brand');
+        if (brandElement) brand = brandElement.value;
+    }
+
+    if (!account || !amount || !description || !date) {
+        alert('請填寫所有必要欄位');
+        return;
+    }
+
+    const newTransaction = {
+        id: Date.now(),
+        account,
+        amount,
+        description,
+        date,
+        invoiceNumber: invoiceNumber || '',
+        invoiceDate: invoiceDate || '',
+        accountingStatus: currentAccountingStatus[prefix],
+        type // 新增：將類型儲存到交易記錄中
+    };
+
+    if (business === 'craft' && category === 'external') {
+        newTransaction.brand = brand;
+    }
+
+    businessData[business][category].push(newTransaction);
+    saveData();
+
+    // 清空表單
+    document.getElementById(prefix + '-account').value = '';
+    document.getElementById(prefix + '-amount').value = '';
+    document.getElementById(prefix + '-description').value = '';
+    document.getElementById(prefix + '-invoice').value = '';
+    document.getElementById(prefix + '-invoice-date').value = '';
+    document.getElementById(prefix + '-type').value = 'expense'; // 修正：清空時預設為支出
+    document.getElementById(prefix + '-date').value = ''; // 新增：清空日期
+    
+    // 如果是手工藝品事業的外帳，也清空品牌
+    if (business === 'craft' && category === 'external') {
+        const brandElement = document.getElementById(prefix + '-brand');
+        if (brandElement) brandElement.value = '';
+    }
+
+    // 重置入帳狀態按鈕
+    const toggleBtn = document.getElementById(prefix + '-status-toggle');
+    const textSpan = document.getElementById(prefix + '-status-text');
+    if (toggleBtn && textSpan) {
+        toggleBtn.classList.remove('pending');
+        textSpan.textContent = '已入帳';
+        currentAccountingStatus[prefix] = 'recorded';
+    }
+
+    // 隱藏表單
+    const formElement = document.getElementById(prefix + '-form');
+    if (formElement) formElement.classList.add('hidden');
+
+    // 更新顯示
+    updateView(business, category);
+
+    // 如果在儀表板，也要更新儀表板
+    if (currentView === 'dashboard') {
+        updateDashboard(business);
+    }
+}
+
+        // 新增庫存商品
+        function addInventoryItem() {
+            const name = document.getElementById('inventory-name').value;
+            const category = document.getElementById('inventory-category').value;
+            const quantity = parseInt(document.getElementById('inventory-quantity').value);
+            const cost = parseFloat(document.getElementById('inventory-cost').value);
+            const price = parseFloat(document.getElementById('inventory-price').value);
+            const brand = document.getElementById('inventory-brand').value;
+            const notes = document.getElementById('inventory-notes').value;
+            
+            if (!name || !category || !quantity || !cost || !price) {
+                alert('請填寫所有必要欄位');
+                return;
+            }
+            
+            const newItem = {
+                id: Date.now(),
+                name,
+                category,
+                quantity,
+                cost,
+                price,
+                brand,
+                notes
+            };
+            
+            businessData.craft.inventory.push(newItem);
+            saveData();
+            
+            // 清空表單
+            document.getElementById('inventory-name').value = '';
+            document.getElementById('inventory-category').value = '';
+            document.getElementById('inventory-quantity').value = '';
+            document.getElementById('inventory-cost').value = '';
+            document.getElementById('inventory-price').value = '';
+            document.getElementById('inventory-brand').value = '';
+            document.getElementById('inventory-notes').value = '';
+            
+            // 隱藏表單
+            const formElement = document.getElementById('inventory-form');
+            if (formElement) formElement.classList.add('hidden');
+            
+            // 更新顯示
+            updateInventoryTable();
+            if (currentView === 'dashboard') {
+                updateDashboard('craft');
+            }
+        }
+
+        // 刪除交易記錄
+        function deleteTransaction(business, category, id) {
+            if (!confirm('確定要刪除這筆記錄嗎？')) return;
+            
+            businessData[business][category] = businessData[business][category].filter(t => t.id !== id);
+            saveData();
+            
+            // 更新顯示
+            updateView(business, category);
+            if (currentView === 'dashboard') {
+                updateDashboard(business);
+            }
+        }
+
+        // 刪除庫存商品
+        function deleteInventory(id) {
+            if (!confirm('確定要刪除這個商品嗎？')) return;
+            
+            businessData.craft.inventory = businessData.craft.inventory.filter(item => item.id !== id);
+            saveData();
+            
+            // 更新顯示
+            updateInventoryTable();
+            if (currentView === 'dashboard') {
+                updateDashboard('craft');
+            }
+        }
+
+        // 清除所有資料
+        function clearAllData() {
+            if (confirm('確定要清除所有資料嗎？此操作無法復原！')) {
+                if (confirm('最後確認：這將刪除所有交易記錄和庫存資料！')) {
+                    localStorage.removeItem('businessData');
+                    
+                    businessData = {
+                        studio: {
+                            internal: [],
+                            external: []
+                        },
+                        craft: {
+                            internal: [],
+                            external: [],
+                            inventory: []
+                        }
+                    };
+                    
+                    saveData();
+                    
+                    // 重新載入當前視圖
+                    if (currentBusiness && currentView) {
+                        updateView(currentBusiness, currentView);
+                    }
+                    
+                    alert('所有資料已清除！');
+                }
+            }
+        }
+
+        // 匯出Excel功能
+        function exportToExcel(business) {
+            if (typeof XLSX === 'undefined') {
+                alert('Excel功能載入中，請稍後再試...');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+            
+            // 內帳報表
+            const internalData = businessData[business].internal.map(t => ({
+                '交易日期': t.date,
+                '會計科目': t.account,
+                '摘要說明': t.description,
+                '金額': t.amount,
+                '發票號碼': t.invoiceNumber || '',
+                '發票日期': t.invoiceDate || '',
+                '入帳狀態': t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'
+            }));
+            
+            const ws1 = XLSX.utils.json_to_sheet(internalData);
+            XLSX.utils.book_append_sheet(wb, ws1, '內帳記錄');
+            
+            // 外帳報表
+            const externalData = businessData[business].external.map(t => {
+                const data = {
+                    '交易日期': t.date,
+                    '會計科目': t.account,
+                    '摘要說明': t.description,
+                    '收入': t.type === 'income' ? t.amount : '',
+                    '支出': t.type === 'expense' ? t.amount : '',
+                    '類型': t.type === 'income' ? '營業收入' : '營業支出',
+                    '發票號碼': t.invoiceNumber || '',
+                    '發票日期': t.invoiceDate || '',
+                    '入帳狀態': t.accountingStatus === 'recorded' ? '已入帳' : '待入帳'
+                };
+                
+                if (business === 'craft') {
+                    data['品牌'] = t.brand || '';
+                }
+                
+                return data;
+            });
+            
+            const ws2 = XLSX.utils.json_to_sheet(externalData);
+            XLSX.utils.book_append_sheet(wb, ws2, '外帳記錄');
+            
+            // 手工藝品特有：庫存報表
+            if (business === 'craft') {
+                const inventoryData = businessData.craft.inventory.map(item => ({
+                    '品牌': item.brand || '',
+                    '商品分類': item.category,
+                    '商品名稱': item.name,
+                    '庫存數量': item.quantity,
+                    '單位成本': item.cost,
+                    '單位售價': item.price,
+                    '總成本': item.quantity * item.cost,
+                    '總價值': item.quantity * item.price,
+                    '毛利率': `${((item.price - item.cost) / item.price * 100).toFixed(1)}%`,
+                    '備註': item.notes || ''
+                }));
+                
+                const ws3 = XLSX.utils.json_to_sheet(inventoryData);
+                XLSX.utils.book_append_sheet(wb, ws3, '庫存報表');
+            }
+            
+            const businessName = business === 'studio' ? '攝影工作室' : '手工藝品事業';
+            XLSX.writeFile(wb, `${businessName}報表_${new Date().toISOString().split('T')[0]}.xlsx`);
+            
+            alert('Excel檔案已成功匯出！');
+        }
+    </script>
+</body>
+</html>
