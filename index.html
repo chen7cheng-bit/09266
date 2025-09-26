@@ -564,46 +564,40 @@
                         </div>
 
                         <div id="studio-internal-form" class="form-section hidden">
-    <h4 class="form-title">新增攝影工作室內帳記錄</h4>
-    <div class="form-grid">
-        <select id="studio-internal-type" class="form-control">
-            <option value="expense">內帳支出</option>
-            <option value="income">內帳收入</option>
-        </select>
-        
-        <select id="studio-internal-account" class="form-control">
-            <option value="">選擇會計科目</option>
-        </select>
-        <input type="number" id="studio-internal-amount" class="form-control" placeholder="金額">
-        <input type="text" id="studio-internal-description" class="form-control" placeholder="詳細描述">
-        <input type="date" id="studio-internal-date" class="form-control" title="交易日期">
-        
-        <input type="text" id="studio-internal-invoice" class="form-control" placeholder="發票號碼 (選填)">
-        <input type="date" id="studio-internal-invoice-date" class="form-control" title="發票日期 (選填)">
-        
-        <button type="button" id="studio-internal-status-toggle" class="btn btn-toggle" onclick="toggleAccountingStatus('studio-internal')">
-            <span id="studio-internal-status-text">已入帳</span>
-        </button>
-        
-        <button class="btn btn-success" onclick="addTransaction('studio', 'internal')">新增記錄</button>
-    </div>
-</div>
+                            <h4 class="form-title">新增攝影工作室內帳記錄</h4>
+                            <div class="form-grid">
+                                <select id="studio-internal-account" class="form-control">
+                                    <option value="">選擇會計科目</option>
+                                </select>
+                                <input type="number" id="studio-internal-amount" class="form-control" placeholder="金額">
+                                <input type="text" id="studio-internal-description" class="form-control" placeholder="詳細描述">
+                                <input type="date" id="studio-internal-date" class="form-control" title="交易日期">
+                                
+                                <!-- 發票相關欄位 -->
+                                <input type="text" id="studio-internal-invoice" class="form-control" placeholder="發票號碼 (選填)">
+                                <input type="date" id="studio-internal-invoice-date" class="form-control" title="發票日期 (選填)">
+                                
+                                <button type="button" id="studio-internal-status-toggle" class="btn btn-toggle" onclick="toggleAccountingStatus('studio-internal')">
+                                    <span id="studio-internal-status-text">已入帳</span>
+                                </button>
+                                
+                                <button class="btn btn-success" onclick="addTransaction('studio', 'internal')">新增記錄</button>
+                            </div>
+                        </div>
 
                         <div class="table-container">
                             <table class="table">
                                 <thead>
                                     <tr>
-        <th>交易日期</th>
-        <th>類型</th>
-        <th>會計科目</th>
-        <th>摘要說明</th>
-        <th>收入</th>
-        <th>支出</th>
-        <th>發票資訊</th>
-        <th>入帳狀態</th>
-        <th>操作</th>
-    </tr>
-</thead>
+                                        <th>交易日期</th>
+                                        <th>會計科目</th>
+                                        <th>摘要說明</th>
+                                        <th>金額</th>
+                                        <th>發票資訊</th>
+                                        <th>入帳狀態</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
                                 <tbody id="studio-internal-table"></tbody>
                             </table>
                         </div>
@@ -682,36 +676,32 @@
                             </div>
                         </div>
 
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-label">月度內帳支出</div>
-        <div class="stat-value amount-negative" id="studio-report-internal-expense">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">月度內帳收入</div>
-        <div class="stat-value amount-positive" id="studio-report-internal-income">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">月度外帳收入</div>
-        <div class="stat-value amount-positive" id="studio-report-external-income">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">月度外帳支出</div>
-        <div class="stat-value amount-negative" id="studio-report-external-expense">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">月度淨利</div>
-        <div class="stat-value" id="studio-report-profit">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">已入帳交易</div>
-        <div class="stat-value" id="studio-report-recorded">0 筆</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">待入帳交易</div>
-        <div class="stat-value amount-negative" id="studio-report-pending">0 筆</div>
-    </div>
-</div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">月度內帳支出</div>
+                                <div class="stat-value amount-negative" id="studio-report-internal">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">月度外帳收入</div>
+                                <div class="stat-value amount-positive" id="studio-report-income">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">月度外帳支出</div>
+                                <div class="stat-value amount-negative" id="studio-report-expense">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">月度淨利</div>
+                                <div class="stat-value" id="studio-report-profit">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">已入帳交易</div>
+                                <div class="stat-value" id="studio-report-recorded">0 筆</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">待入帳交易</div>
+                                <div class="stat-value amount-negative" id="studio-report-pending">0 筆</div>
+                            </div>
+                        </div>
 
                         <div class="card">
                             <div class="card-body">
@@ -729,31 +719,31 @@
                     <div class="card-body">
                         <h3 class="section-title">📅 攝影工作室年度總表</h3>
                         <div class="yearly-stats">
-    <div class="stat-card">
-        <div class="stat-label">年度營業收入</div>
-        <div class="stat-value amount-positive" id="studio-yearly-external-income">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">年度營業支出</div>
-        <div class="stat-value amount-negative" id="studio-yearly-external-expense">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">年度內帳收入</div>
-        <div class="stat-value amount-positive" id="studio-yearly-internal-income">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">年度內帳支出</div>
-        <div class="stat-value amount-negative" id="studio-yearly-internal-expense">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">年度淨利</div>
-        <div class="stat-value" id="studio-yearly-profit">NT$ 0</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-label">年度待入帳</div>
-        <div class="stat-value amount-negative" id="studio-yearly-pending">NT$ 0</div>
-    </div>
-</div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度營業收入</div>
+                                <div class="stat-value amount-positive" id="studio-yearly-income">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度營業支出</div>
+                                <div class="stat-value amount-negative" id="studio-yearly-expense">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度內帳支出</div>
+                                <div class="stat-value amount-negative" id="studio-yearly-internal">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度營業淨利</div>
+                                <div class="stat-value" id="studio-yearly-profit">NT$ 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">年度待入帳</div>
+                                <div class="stat-value amount-negative" id="studio-yearly-pending">NT$ 0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- 手工藝品事業區域 -->
         <div id="craft-section" class="hidden">
@@ -1405,47 +1395,44 @@
         }
 
         // 更新月報表
-function updateMonthlyReport(business) {
-    const selector = document.getElementById(business + '-month-selector');
-    if (!selector || !selector.value) return;
-    
-    const [year, month] = selector.value.split('-').map(Number);
-    
-    // 篩選該月份的交易資料
-    const allInternalTransactions = businessData[business].internal.filter(t => {
-        const date = new Date(t.date);
-        return date.getFullYear() === year && date.getMonth() === month - 1;
-    });
-    
-    const allExternalTransactions = businessData[business].external.filter(t => {
-        const date = new Date(t.date);
-        return date.getFullYear() === year && date.getMonth() === month - 1;
-    });
-    
-    // 計算統計數據
-    const internalIncome = allInternalTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-    const internalExpense = allInternalTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-    
-    const externalIncome = allExternalTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-    const externalExpense = allExternalTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-    
-    // 重新計算淨利： (所有收入) - (所有支出)
-    const profit = internalIncome + externalIncome - internalExpense - externalExpense;
-    
-    // 計算入帳狀態統計
-    const allTransactions = [...allInternalTransactions, ...allExternalTransactions];
-    const recordedCount = allTransactions.filter(t => t.accountingStatus === 'recorded').length;
-    const pendingCount = allTransactions.filter(t => t.accountingStatus === 'pending').length;
-    
-    // 更新顯示
-    document.getElementById(`${business}-report-internal-income`).textContent = `NT$ ${internalIncome.toLocaleString()}`;
-    document.getElementById(`${business}-report-internal-expense`).textContent = `NT$ ${internalExpense.toLocaleString()}`;
-    document.getElementById(`${business}-report-income`).textContent = `NT$ ${externalIncome.toLocaleString()}`;
-    document.getElementById(`${business}-report-expense`).textContent = `NT$ ${externalExpense.toLocaleString()}`;
-    document.getElementById(`${business}-report-profit`).textContent = `NT$ ${profit.toLocaleString()}`;
-    document.getElementById(`${business}-report-recorded`).textContent = `${recordedCount} 筆`;
-    document.getElementById(`${business}-report-pending`).textContent = `${pendingCount} 筆`;
-}
+        function updateMonthlyReport(business) {
+            const selector = document.getElementById(business + '-month-selector');
+            if (!selector || !selector.value) return;
+            
+            const [year, month] = selector.value.split('-').map(Number);
+            
+            // 篩選該月份的交易資料
+            const monthlyInternal = businessData[business].internal.filter(t => {
+                const date = new Date(t.date);
+                return date.getFullYear() === year && date.getMonth() === month - 1;
+            });
+            
+            const monthlyExternal = businessData[business].external.filter(t => {
+                const date = new Date(t.date);
+                return date.getFullYear() === year && date.getMonth() === month - 1;
+            });
+            
+            // 計算統計數據
+            const internalAmount = monthlyInternal.reduce((sum, t) => sum + t.amount, 0);
+            const incomeAmount = monthlyExternal.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const expenseAmount = monthlyExternal.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const profit = incomeAmount - expenseAmount - internalAmount;
+            
+            // 計算入帳狀態統計
+            const allTransactions = [...monthlyInternal, ...monthlyExternal];
+            const recordedCount = allTransactions.filter(t => t.accountingStatus === 'recorded').length;
+            const pendingCount = allTransactions.filter(t => t.accountingStatus === 'pending').length;
+            
+            // 更新顯示
+            const elements = {
+                [`${business}-report-internal`]: `NT$ ${internalAmount.toLocaleString()}`,
+                [`${business}-report-income`]: `NT$ ${incomeAmount.toLocaleString()}`,
+                [`${business}-report-expense`]: `NT$ ${expenseAmount.toLocaleString()}`,
+                [`${business}-report-profit`]: `NT$ ${profit.toLocaleString()}`,
+                [`${business}-report-recorded`]: `${recordedCount} 筆`,
+                [`${business}-report-pending`]: `${pendingCount} 筆`
+            };
+            
             // 手工藝品特有統計
             if (business === 'craft') {
                 const taiwanYouthSales = monthlyExternal
@@ -1626,58 +1613,59 @@ function updateMonthlyReport(business) {
         }
 
         // 更新儀表板
-function updateDashboard(business) {
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
-    
-    // 篩選本月內帳資料
-    const monthlyInternal = businessData[business].internal
-        .filter(t => {
-            const date = new Date(t.date);
-            return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-        });
-
-    const monthlyInternalIncome = monthlyInternal
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0);
-
-    const monthlyInternalExpense = monthlyInternal
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0);
-
-    // 篩選本月外帳資料
-    const monthlyExternal = businessData[business].external
-        .filter(t => {
-            const date = new Date(t.date);
-            return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-        });
-    
-    const monthlyExternalIncome = monthlyExternal
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0);
-    
-    const monthlyExternalExpense = monthlyExternal
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0);
-    
-    const monthlyProfit = (monthlyInternalIncome + monthlyExternalIncome) - (monthlyInternalExpense + monthlyExternalExpense);
-
-    // 計算本月待入帳金額
-    const pendingAmount = [...monthlyInternal, ...monthlyExternal]
-        .filter(t => t.accountingStatus === 'pending')
-        .reduce((sum, t) => sum + t.amount, 0);
-    
-    // 更新顯示
-    document.getElementById(`${business}-monthly-internal`).textContent = `NT$ ${monthlyInternalExpense.toLocaleString()}`;
-    document.getElementById(`${business}-monthly-external-income`).textContent = `NT$ ${monthlyExternalIncome.toLocaleString()}`;
-    document.getElementById(`${business}-monthly-external-expense`).textContent = `NT$ ${monthlyExternalExpense.toLocaleString()}`;
-    document.getElementById(`${business}-monthly-profit`).textContent = `NT$ ${monthlyProfit.toLocaleString()}`;
-    document.getElementById(`${business}-monthly-pending-amount`).textContent = `NT$ ${pendingAmount.toLocaleString()}`;
-    document.getElementById(`${business}-monthly-profit`).className = `stat-value ${monthlyProfit >= 0 ? 'amount-positive' : 'amount-negative'}`;
-
-    // 更新最近交易記錄
-    updateRecentTransactions(business);
-}
+        function updateDashboard(business) {
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            // 計算本月統計
+            const monthlyInternal = businessData[business].internal
+                .filter(t => {
+                    const date = new Date(t.date);
+                    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+                })
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const monthlyExternal = businessData[business].external
+                .filter(t => {
+                    const date = new Date(t.date);
+                    return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+                });
+            
+            const monthlyExternalIncome = monthlyExternal
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const monthlyExternalExpense = monthlyExternal
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const monthlyProfit = monthlyExternalIncome - monthlyExternalExpense - monthlyInternal;
+            
+            // 計算待入帳金額
+            const pendingAmount = [
+                ...businessData[business].internal.filter(t => t.accountingStatus === 'pending'),
+                ...businessData[business].external.filter(t => t.accountingStatus === 'pending')
+            ].reduce((sum, t) => sum + t.amount, 0);
+            
+            // 更新顯示
+            const elements = {
+                [`${business}-monthly-internal`]: `NT$ ${monthlyInternal.toLocaleString()}`,
+                [`${business}-monthly-external-income`]: `NT$ ${monthlyExternalIncome.toLocaleString()}`,
+                [`${business}-monthly-external-expense`]: `NT$ ${monthlyExternalExpense.toLocaleString()}`,
+                [`${business}-monthly-profit`]: `NT$ ${monthlyProfit.toLocaleString()}`,
+                [`${business}-pending-amount`]: `NT$ ${pendingAmount.toLocaleString()}`
+            };
+            
+            Object.entries(elements).forEach(([id, text]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                    if (id.includes('profit')) {
+                        element.className = `stat-value ${monthlyProfit >= 0 ? 'amount-positive' : 'amount-negative'}`;
+                    }
+                }
+            });
+            
             // 手工藝品特有統計
             if (business === 'craft') {
                 const inventoryValue = businessData.craft.inventory.reduce((sum, item) => 
@@ -1851,9 +1839,9 @@ function updateDashboard(business) {
                 
                 return `
                     <tr>
-                        <td>${brandTag}</td>
-                        <td>${item.category}</td>
                         <td>${item.name}</td>
+                        <td>${item.category}</td>
+                        <td>${brandTag}</td>
                         <td>NT$ ${item.cost.toLocaleString()}</td>
                         <td>NT$ ${item.price.toLocaleString()}</td>
                         <td>${item.quantity}</td>
@@ -1870,62 +1858,52 @@ function updateDashboard(business) {
         }
 
         // 更新年度統計
-function updateYearlyStats(business) {
-    const currentYear = new Date().getFullYear();
-    
-    // 篩選本年度所有內帳資料
-    const yearlyInternal = businessData[business].internal
-        .filter(t => new Date(t.date).getFullYear() === currentYear);
-
-    const yearlyInternalIncome = yearlyInternal
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0);
-    
-    const yearlyInternalExpense = yearlyInternal
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0);
-    
-    // 篩選本年度所有外帳資料
-    const yearlyExternal = businessData[business].external
-        .filter(t => new Date(t.date).getFullYear() === currentYear);
-    
-    const yearlyExternalIncome = yearlyExternal
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0);
-    
-    const yearlyExternalExpense = yearlyExternal
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0);
-    
-    // 計算年度淨利
-    const yearlyProfit = (yearlyInternalIncome + yearlyExternalIncome) - (yearlyInternalExpense + yearlyExternalExpense);
-    
-    // 計算年度待入帳金額
-    const yearlyPending = [
-        ...yearlyInternal.filter(t => t.accountingStatus === 'pending'),
-        ...yearlyExternal.filter(t => t.accountingStatus === 'pending')
-    ].reduce((sum, t) => sum + t.amount, 0);
-    
-    // 更新統計顯示
-    const elements = {
-        [`${business}-yearly-external-income`]: `NT$ ${yearlyExternalIncome.toLocaleString()}`,
-        [`${business}-yearly-external-expense`]: `NT$ ${yearlyExternalExpense.toLocaleString()}`,
-        [`${business}-yearly-internal-income`]: `NT$ ${yearlyInternalIncome.toLocaleString()}`,
-        [`${business}-yearly-internal-expense`]: `NT$ ${yearlyInternalExpense.toLocaleString()}`,
-        [`${business}-yearly-profit`]: `NT$ ${yearlyProfit.toLocaleString()}`,
-        [`${business}-yearly-pending`]: `NT$ ${yearlyPending.toLocaleString()}`
-    };
-    
-    Object.entries(elements).forEach(([id, text]) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.textContent = text;
-            if (id.includes('profit')) {
-                element.className = `stat-value ${yearlyProfit >= 0 ? 'amount-positive' : 'amount-negative'}`;
-            }
-        }
-    });
-}
+        function updateYearlyStats(business) {
+            const currentYear = new Date().getFullYear();
+            
+            const yearlyExternal = businessData[business].external
+                .filter(t => new Date(t.date).getFullYear() === currentYear);
+            
+            const yearlyExternalIncome = yearlyExternal
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const yearlyExternalExpense = yearlyExternal
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const yearlyInternalExpense = businessData[business].internal
+                .filter(t => new Date(t.date).getFullYear() === currentYear)
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const yearlyProfit = yearlyExternalIncome - yearlyExternalExpense;
+            
+            // 計算年度待入帳金額
+            const yearlyPending = [
+                ...businessData[business].internal.filter(t => 
+                    new Date(t.date).getFullYear() === currentYear && t.accountingStatus === 'pending'),
+                ...businessData[business].external.filter(t => 
+                    new Date(t.date).getFullYear() === currentYear && t.accountingStatus === 'pending')
+            ].reduce((sum, t) => sum + t.amount, 0);
+            
+            // 更新統計顯示
+            const elements = {
+                [`${business}-yearly-income`]: `NT$ ${yearlyExternalIncome.toLocaleString()}`,
+                [`${business}-yearly-expense`]: `NT$ ${yearlyExternalExpense.toLocaleString()}`,
+                [`${business}-yearly-internal`]: `NT$ ${yearlyInternalExpense.toLocaleString()}`,
+                [`${business}-yearly-profit`]: `NT$ ${yearlyProfit.toLocaleString()}`,
+                [`${business}-yearly-pending`]: `NT$ ${yearlyPending.toLocaleString()}`
+            };
+            
+            Object.entries(elements).forEach(([id, text]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                    if (id.includes('profit')) {
+                        element.className = `stat-value ${yearlyProfit >= 0 ? 'amount-positive' : 'amount-negative'}`;
+                    }
+                }
+            });
             
             // 手工藝品特有統計
             if (business === 'craft') {
@@ -1939,84 +1917,88 @@ function updateYearlyStats(business) {
         }
 
         // 新增交易記錄
-function addTransaction(business, category) {
-    const prefix = business + '-' + category;
-    const type = document.getElementById(prefix + '-type').value; // 將類型讀取移到這裡
-    const account = document.getElementById(prefix + '-account').value;
-    const amount = parseFloat(document.getElementById(prefix + '-amount').value);
-    const description = document.getElementById(prefix + '-description').value;
-    const date = document.getElementById(prefix + '-date').value;
-    const invoiceNumber = document.getElementById(prefix + '-invoice').value;
-    const invoiceDate = document.getElementById(prefix + '-invoice-date').value;
-
-    let brand = '';
-
-    // 這段處理只針對手工藝品外帳的品牌欄位
-    if (business === 'craft' && category === 'external') {
-        const brandElement = document.getElementById(prefix + '-brand');
-        if (brandElement) brand = brandElement.value;
-    }
-
-    if (!account || !amount || !description || !date) {
-        alert('請填寫所有必要欄位');
-        return;
-    }
-
-    const newTransaction = {
-        id: Date.now(),
-        account,
-        amount,
-        description,
-        date,
-        invoiceNumber: invoiceNumber || '',
-        invoiceDate: invoiceDate || '',
-        accountingStatus: currentAccountingStatus[prefix],
-        type // 新增：將類型儲存到交易記錄中
-    };
-
-    if (business === 'craft' && category === 'external') {
-        newTransaction.brand = brand;
-    }
-
-    businessData[business][category].push(newTransaction);
-    saveData();
-
-    // 清空表單
-    document.getElementById(prefix + '-account').value = '';
-    document.getElementById(prefix + '-amount').value = '';
-    document.getElementById(prefix + '-description').value = '';
-    document.getElementById(prefix + '-invoice').value = '';
-    document.getElementById(prefix + '-invoice-date').value = '';
-    document.getElementById(prefix + '-type').value = 'expense'; // 修正：清空時預設為支出
-    document.getElementById(prefix + '-date').value = ''; // 新增：清空日期
-    
-    // 如果是手工藝品事業的外帳，也清空品牌
-    if (business === 'craft' && category === 'external') {
-        const brandElement = document.getElementById(prefix + '-brand');
-        if (brandElement) brandElement.value = '';
-    }
-
-    // 重置入帳狀態按鈕
-    const toggleBtn = document.getElementById(prefix + '-status-toggle');
-    const textSpan = document.getElementById(prefix + '-status-text');
-    if (toggleBtn && textSpan) {
-        toggleBtn.classList.remove('pending');
-        textSpan.textContent = '已入帳';
-        currentAccountingStatus[prefix] = 'recorded';
-    }
-
-    // 隱藏表單
-    const formElement = document.getElementById(prefix + '-form');
-    if (formElement) formElement.classList.add('hidden');
-
-    // 更新顯示
-    updateView(business, category);
-
-    // 如果在儀表板，也要更新儀表板
-    if (currentView === 'dashboard') {
-        updateDashboard(business);
-    }
-}
+        function addTransaction(business, category) {
+            const prefix = business + '-' + category;
+            const account = document.getElementById(prefix + '-account').value;
+            const amount = parseFloat(document.getElementById(prefix + '-amount').value);
+            const description = document.getElementById(prefix + '-description').value;
+            const date = document.getElementById(prefix + '-date').value;
+            const invoiceNumber = document.getElementById(prefix + '-invoice').value;
+            const invoiceDate = document.getElementById(prefix + '-invoice-date').value;
+            
+            let type = null;
+            let brand = '';
+            
+            if (category === 'external') {
+                type = document.getElementById(prefix + '-type').value;
+                if (business === 'craft') {
+                    const brandElement = document.getElementById(prefix + '-brand');
+                    if (brandElement) brand = brandElement.value;
+                }
+            }
+            
+            if (!account || !amount || !description || !date) {
+                alert('請填寫所有必要欄位');
+                return;
+            }
+            
+            const newTransaction = {
+                id: Date.now(),
+                account,
+                amount,
+                description,
+                date,
+                invoiceNumber: invoiceNumber || '',
+                invoiceDate: invoiceDate || '',
+                accountingStatus: currentAccountingStatus[prefix]
+            };
+            
+            if (category === 'external') {
+                newTransaction.type = type;
+                if (business === 'craft') {
+                    newTransaction.brand = brand;
+                }
+            }
+            
+            businessData[business][category].push(newTransaction);
+            saveData();
+            
+            // 清空表單
+            document.getElementById(prefix + '-account').value = '';
+            document.getElementById(prefix + '-amount').value = '';
+            document.getElementById(prefix + '-description').value = '';
+            document.getElementById(prefix + '-invoice').value = '';
+            document.getElementById(prefix + '-invoice-date').value = '';
+            
+            if (category === 'external') {
+                document.getElementById(prefix + '-type').value = 'income';
+                if (business === 'craft') {
+                    const brandElement = document.getElementById(prefix + '-brand');
+                    if (brandElement) brandElement.value = '';
+                }
+            }
+            
+            // 重置入帳狀態按鈕
+            const toggleBtn = document.getElementById(prefix + '-status-toggle');
+            const textSpan = document.getElementById(prefix + '-status-text');
+            if (toggleBtn && textSpan) {
+                toggleBtn.classList.remove('pending');
+                textSpan.textContent = '已入帳';
+                currentAccountingStatus[prefix] = 'recorded';
+            }
+            
+            // 隱藏表單
+            const formElement = document.getElementById(prefix + '-form');
+            if (formElement) formElement.classList.add('hidden');
+            
+            // 更新顯示
+            updateView(business, category);
+            
+            // 如果在儀表板，也要更新儀表板
+            if (currentView === 'dashboard') {
+                updateDashboard(business);
+            }
+        }
 
         // 新增庫存商品
         function addInventoryItem() {
